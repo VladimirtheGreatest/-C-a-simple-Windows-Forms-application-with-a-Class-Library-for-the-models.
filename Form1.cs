@@ -14,11 +14,29 @@ namespace WindowsFormsApp1
     public partial class Shop : Form
     {
         private Store store = new Store();
+        private List<Item> shoppingCartData = new List<Item>();
+        BindingSource itemsBinding = new BindingSource();
+        BindingSource cartBinding = new BindingSource();
+
 
         public Shop()
         {
             InitializeComponent();
             SetupData();
+
+            //links our items to the binding source
+            itemsBinding.DataSource = store.Items;
+            itemsListbox.DataSource = itemsBinding;
+
+            itemsListbox.DisplayMember = "Display";
+            itemsListbox.ValueMember = "Display";
+
+            //links our items to the binding source
+            cartBinding.DataSource = shoppingCartData;
+            shoppingCartListbox.DataSource = cartBinding;
+
+            shoppingCartListbox.DisplayMember = "Display";
+            shoppingCartListbox.ValueMember = "Display";
         }
         //temporary method for some dummy data
         private void SetupData()
@@ -61,6 +79,24 @@ namespace WindowsFormsApp1
             });
 
             store.Name = "Sputify";
+
+
+        }
+
+        private void addToCart_Click(object sender, EventArgs e)
+        {
+            
+            //Figure out what is selected, Copy that item to the shopping cart
+            //Do we remove the item from the items list
+
+            // chooses the item from the listbox the one that is actually highlighted
+            Item selectedItem = (Item)itemsListbox.SelectedItem;
+
+
+            shoppingCartData.Add(selectedItem);
+
+            //whenever we modify list we need to reset bindings
+            cartBinding.ResetBindings(false);
 
 
         }
