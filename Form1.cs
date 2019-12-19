@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
     public partial class Shop : Form
     {
         private Store store = new Store();
-        private List<Item> shoppingCartData = new List<Item>();
+        private List<Item> shoppingCartData = new List<Item>(); //new instance of the list which is empty
         BindingSource itemsBinding = new BindingSource();
         BindingSource cartBinding = new BindingSource();
 
@@ -25,8 +25,8 @@ namespace WindowsFormsApp1
             SetupData();
 
             //links our items to the binding source
-            itemsBinding.DataSource = store.Items;
-            itemsListbox.DataSource = itemsBinding;
+            itemsBinding.DataSource = store.Items.Where(x => x.Sold == false).ToList();  //binding to the class store list of items, filtering products that have not been sold
+            itemsListbox.DataSource = itemsBinding; //binding to the field (form)
 
             itemsListbox.DisplayMember = "Display";
             itemsListbox.ValueMember = "Display";
@@ -97,6 +97,30 @@ namespace WindowsFormsApp1
 
             //whenever we modify list we need to reset bindings
             cartBinding.ResetBindings(false);
+
+
+        }
+
+        private void makePurchase_Click(object sender, EventArgs e)
+        {
+            //Mark each item in cart as sold
+            //Clear the cart
+            //implement pop up window asking for confirmation and potentially getting back
+
+            foreach (Item item in shoppingCartData)
+            {
+                item.Sold = true;
+            }
+
+            shoppingCartData.Clear();
+
+            //reseting the binding
+            itemsBinding.DataSource = store.Items.Where(x => x.Sold == false).ToList();
+
+            //whenever we modify list we need to reset bindings
+            cartBinding.ResetBindings(false);
+            //this binding is for the list of items they will be updated once we purchase the item so they need to be updated as well
+            itemsBinding.ResetBindings(false);
 
 
         }

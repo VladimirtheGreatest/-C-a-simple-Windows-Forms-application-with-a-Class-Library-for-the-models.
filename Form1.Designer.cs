@@ -104,6 +104,7 @@
             this.makePurchase.TabIndex = 6;
             this.makePurchase.Text = "Purchase";
             this.makePurchase.UseVisualStyleBackColor = true;
+            this.makePurchase.Click += new System.EventHandler(this.makePurchase_Click);
             // 
             // Shop
             // 
@@ -118,7 +119,7 @@
             this.Controls.Add(this.itemsListboxLabel);
             this.Controls.Add(this.headerText);
             this.Font = new System.Drawing.Font("Britannic Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Shop";
             this.Text = "Shop";
             this.ResumeLayout(false);
