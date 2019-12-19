@@ -17,6 +17,8 @@ namespace WindowsFormsApp1
         private List<Item> shoppingCartData = new List<Item>(); //new instance of the list which is empty
         BindingSource itemsBinding = new BindingSource();
         BindingSource cartBinding = new BindingSource();
+        BindingSource suppliersBinding = new BindingSource();
+        private decimal storeProfit = 0;
 
 
         public Shop()
@@ -37,6 +39,12 @@ namespace WindowsFormsApp1
 
             shoppingCartListbox.DisplayMember = "Display";
             shoppingCartListbox.ValueMember = "Display";
+
+            suppliersBinding.DataSource = store.Suppliers;
+            supplierListbox.DataSource = suppliersBinding;
+
+            supplierListbox.DisplayMember = "Display";
+            supplierListbox.ValueMember = "Display";
         }
         //temporary method for some dummy data
         private void SetupData()
@@ -85,7 +93,7 @@ namespace WindowsFormsApp1
 
         private void addToCart_Click(object sender, EventArgs e)
         {
-            
+
             //Figure out what is selected, Copy that item to the shopping cart
             //Do we remove the item from the items list
 
@@ -110,6 +118,8 @@ namespace WindowsFormsApp1
             foreach (Item item in shoppingCartData)
             {
                 item.Sold = true;
+                item.Owner.PaymentDue += (decimal)item.Owner.Commission * item.Price;
+                storeProfit += (1 - (decimal)item.Owner.Commission) * item.Price;
             }
 
             shoppingCartData.Clear();
@@ -117,12 +127,14 @@ namespace WindowsFormsApp1
             //reseting the binding
             itemsBinding.DataSource = store.Items.Where(x => x.Sold == false).ToList();
 
+            //adding store profit value
+            storeProfitValue.Text = string.Format("${0}", storeProfit);
+
             //whenever we modify list we need to reset bindings
             cartBinding.ResetBindings(false);
             //this binding is for the list of items they will be updated once we purchase the item so they need to be updated as well
             itemsBinding.ResetBindings(false);
-
-
+            suppliersBinding.ResetBindings(false);
         }
     }
 }
